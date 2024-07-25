@@ -1,0 +1,37 @@
+<configuration>
+  <appSettings>
+    <add key="IpWhiteList" value="127.0.0.1,192.168.1.1" />
+  </appSettings>
+</configuration>
+using System.Web.Services;
+using TestAsmxProject.Filter.SOAP;
+
+namespace TestAsmxProject.Asmx
+{
+    /// <summary>
+    /// Test 的摘要说明
+    /// </summary>
+    [WebService(Namespace = "http://tempuri.org/")]
+    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+    [System.ComponentModel.ToolboxItem(false)]
+    // 若要允许使用 ASP.NET AJAX 从脚本中调用此 Web 服务，请取消注释以下行。 
+    [System.Web.Script.Services.ScriptService]
+    public class Test : System.Web.Services.WebService
+    {
+
+        [WebMethod]
+        [IpFilter] // 不传入指定IP，使用web.config中的白名单
+        public string HelloWorld()
+        {
+            return "Hello World";
+        }
+
+        [WebMethod(Description = "计算两个数的和")]
+        [IpFilter("127.0.0.1", "192.168.1.1")] // 此处为该方法的IP白名单，加上web.config中的白名单共同生效
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+
+    }
+}
